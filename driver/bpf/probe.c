@@ -294,6 +294,12 @@ BPF_KPROBE(finish_task_switch)
 				record_cpu_offtime(ctx, settings, pid, tid, off_ts, rq_la, delta);
 			}
 		}
+	} else {
+		pid_t vtid;
+		vtid = bpf_task_pid_vnr(n);
+		char f[] = "out cpu anal tid: %ld, vtid: %ld\n";
+		bpf_trace_printk(f, sizeof(f), tid, vtid);
+		bpf_map_update_elem(&tid_vtid, &tid, &vtid, BPF_ANY);
 	}
 
 	return 0;
