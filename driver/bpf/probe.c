@@ -236,6 +236,9 @@ BPF_KPROBE(finish_task_switch)
 
 	u32 tid = _READ(p->pid);
 	u32 pid = _READ(p->tgid);
+	if(settings->cpu_analyzer_debug && settings->cpu_analyzer_debug_pid == pid && settings->cpu_analyzer_debug_tid == tid) {
+		bpf_printk_cpu_analyzer("start off, pid: %d , tid: %d", pid, tid);
+	}
 	u64 ts, *tsp;
 	if (FILTER) {
 		// record previous thread offcpu start time
@@ -271,6 +274,9 @@ BPF_KPROBE(finish_task_switch)
 	if (!(FILTER))
 		return 0;
 
+	if(settings->cpu_analyzer_debug && settings->cpu_analyzer_debug_pid == pid && settings->cpu_analyzer_debug_tid == tid) {
+		bpf_printk_cpu_analyzer("start on, pid: %d , tid: %d", pid, tid);
+	}
 	// record next thread's oncpu start time
 	u64 on_ts = bpf_ktime_get_ns();
 	bpf_map_update_elem(&on_start_ts, &tid, &on_ts, BPF_ANY);

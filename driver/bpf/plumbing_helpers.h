@@ -39,6 +39,12 @@ or GPL2.txt for full copies of the license.
 #define bpf_printk(fmt, ...)
 #endif
 
+#define bpf_printk_cpu_analyzer(fmt, ...)					\
+	do {							\
+		char s[] = fmt;					\
+		bpf_trace_printk(s, sizeof(s), ##__VA_ARGS__);	\
+	} while (0)
+
 static __always_inline void call_filler(void *ctx,
 					void *stack_ctx,
 					enum ppm_event_type evt_type,
