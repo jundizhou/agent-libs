@@ -5197,6 +5197,8 @@ static __always_inline int bpf_cpu_analysis(void *ctx, u32 tid)
 
     pid_t vtid;
 
+	u32 *tsp;
+
     tsp = bpf_map_lookup_elem(&tid_vtid, &tid);
 	if (tsp != 0) {
 		vtid = *tsp;
