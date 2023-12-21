@@ -1665,6 +1665,10 @@ int32_t scap_next(scap_t* handle, OUT scap_evt** pevent, OUT uint16_t* pcpuid)
 
 	if(res == SCAP_SUCCESS)
 	{
+		if((*pevent)->type == PPME_CPU_ANALYSIS_E)
+		{
+			return res;
+		}
 		bool suppressed;
 
 		// Check to see if the event should be suppressed due
